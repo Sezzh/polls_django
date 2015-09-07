@@ -15,12 +15,12 @@ class Question(models.Model):
     def __unicode__(self):
         return self.question_text
 
-    def wasPublishedRecently(self):
+    def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days = 1)
 
-    wasPublishedRecently.admin_order_field = 'pub_date'
-    wasPublishedRecently.boolean = True
-    wasPublishedRecently.short_description = 'Publicado recientemente?'
+    was_published_recently.admin_order_field = 'pub_date'
+    was_published_recently.boolean = True
+    was_published_recently.short_description = 'Publicado recientemente?'
 
 
 class Choice(models.Model):
