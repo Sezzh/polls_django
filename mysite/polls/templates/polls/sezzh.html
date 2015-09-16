@@ -1,0 +1,12 @@
+<h1>{{ title }}</h1>
+
+<p>
+    {{ name }}
+    {{ working }}
+</p>
+
+<form class="SezzhForm" action="{% url 'polls:sezzh_form_send' %}" method="post">
+    {% csrf_token %}
+    <input type="text"  value="">
+    <input type="submit" value="mandar">
+</form>
