@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse
+from django.views import generic
 
 '''from django.template import RequestContext, loader'''
 ''' mandando a llamar a las vistas: HttpResponse, RequestContext y loader o
@@ -10,9 +11,17 @@ from .models import Question, Choice
 
 # Create your views here.
 
+#this replace the def index function
+class IndexView(generic.ListView):
+    template_name = 'polls/index.html'
+    context_object_name = 'latest_question_list'
 
-def index(request):
-    '''return HttpResponse("Hello, world. You're at the polls index.")'''
+    def get_queryset(self):
+        '''Return the last five published questions.'''
+        return Question.objects.order_by('-pub_date')[:5]
+
+'''def index(request):
+    ''''''return HttpResponse("Hello, world. You're at the polls index.")''''''
     latest_question_list = Question.objects.order_by('-pub_date')[:5]
     print latest_question_list
     print type(latest_question_list)
@@ -21,10 +30,14 @@ def index(request):
         'latest_question_list': latest_question_list,
         'sezzhRights': sezzhRights
     }
-    return render(request, 'polls/index.html', context)
+    return render(request, 'polls/index.html', context)'''
 
+#this replace the def detail function
+class DetailView(generic.DetailView):
+    model = Question
+    template_name = 'polls/detail.html'
 
-def detail(request, question_id):
+'''def detail(request, question_id):
     try:
         question = Question.objects.get(pk = question_id)
     except Question.DoesNotExist:
@@ -32,15 +45,19 @@ def detail(request, question_id):
     context = {
             'question': question,
         }
-    return render(request, 'polls/detail.html', context )
+    return render(request, 'polls/detail.html', context )'''
 
+#this replace the def results function
+class ResultsView(generic.DetailView):
+    model = Question
+    template_name = 'polls/results.html'
 
-def results(request, question_id):
+'''def results(request, question_id):
     question = get_object_or_404(Question, pk = question_id)
     context = {
         'question': question,
     }
-    return render(request, 'polls/results.html', context)
+    return render(request, 'polls/results.html', context)'''
 
 def vote(request, question_id):
     p = get_object_or_404(Question, pk = question_id)
@@ -64,7 +81,7 @@ def vote(request, question_id):
         return HttpResponseRedirect(reverse('polls:results', args=(p.id,)))
 
 
-################################################################################
+###############################################################################
 
 
 def sezzh(request, name = 'bebi', working = 'default'):
